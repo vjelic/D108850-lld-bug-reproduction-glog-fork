@@ -5,9 +5,24 @@
 
 #include <iostream>
 
+#if OLD_LINK
+bool lldInvoke(const char *inPath, const char *outPath) {
+    return lld::elf::link({"ld.lld", "-shared", inPath,
+                         "-o", outPath}, /*exitEarly=*/true,
+                        llvm::outs(), llvm::errs());
+}
+#else
+bool lldInvoke(const char *inPath, const char *outPath) {
+    return lld::elf::link({"ld.lld", "-shared", inPath,
+                         "-o", outPath},
+                        llvm::outs(), llvm::errs(), /*exitEarly=*/true,
+                        /*disableOutput=*/false);
+}
+#endif
+
 enum class Status : bool { Success=0, Failure=1 };
 
-Status runLinker(char *path) {
+Status runLinker(const char *path) {
     // Create a temp file for HSA code object.
     int tempHsacoFD = -1;
     llvm::SmallString<128> tempHsacoFilename;
@@ -17,17 +32,14 @@ Status runLinker(char *path) {
     }
     llvm::FileRemover cleanupHsaco(tempHsacoFilename);
     // Invoke lld. Expect a true return value from lld.
-    if (!lld::elf::link({"ld.lld", "-shared", path,
-                         "-o", tempHsacoFilename.c_str()},
-                        llvm::outs(), llvm::errs(), /*exitEarly=*/true,
-                        /*disableOutput=*/false)) {
+    if (!lldInvoke(path, tempHsacoFilename.c_str())) {
         llvm::errs() << "Failed to link: " << path << "\n";
         return Status::Failure;
     }
     return Status::Success;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, const char **argv) {
     for (int i = 1; i < argc; ++i) {
         if (runLinker(argv[i]) == Status::Failure) {
             return 1;
