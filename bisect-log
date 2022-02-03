@@ -1,0 +1,20 @@
+git bisect start '--' 'lld'
+# bad: [8e123ca65f5f9286e59f2c79184d01673c87aa42] [mlir:Standard] Remove support for creating a `unit` ConstantOp
+git bisect bad 8e123ca65f5f9286e59f2c79184d01673c87aa42
+# good: [319181f7671868be6cd4865e9bcc63f6ba2ddb06] [lld-macho] Fix alignment of TLV data sections
+git bisect good 319181f7671868be6cd4865e9bcc63f6ba2ddb06
+# good: [ec47dba1c8a2c89ae3ee3cfa052f69dc5fda153d] [lld][WebAssembly] Perform data relocations during start function
+git bisect good ec47dba1c8a2c89ae3ee3cfa052f69dc5fda153d
+# bad: [0d71f2e097b94bd785bcadfe38cb0875f7756d78] [lld][ELF] Cleanup %t directory in tests, NFC
+git bisect bad 0d71f2e097b94bd785bcadfe38cb0875f7756d78
+# bad: [ac2f3df8396ac5bc507bd84eec185d756420e47c] [lld][WebAssembly] Remove redundant config setting
+git bisect bad ac2f3df8396ac5bc507bd84eec185d756420e47c
+# good: [3f38dc5c046c08111a9c7505d35e530473c213dd] [lld-macho] Silence XAR deprecation warning
+git bisect good 3f38dc5c046c08111a9c7505d35e530473c213dd
+# good: [8f811effac48fdbc1ac5ddbd944884a52866ec14] [lld-macho] Fix grammar in doc
+git bisect good 8f811effac48fdbc1ac5ddbd944884a52866ec14
+# good: [df31ff1b29bc4c2308ec5df8a7ff0ec2ab0942d4] [cmake] Make include(GNUInstallDirs) always below project(..)
+git bisect good df31ff1b29bc4c2308ec5df8a7ff0ec2ab0942d4
+# bad: [83d59e05b201760e3f364ff6316301d347cbad95] Re-land [LLD] Remove global state in lldCommon
+git bisect bad 83d59e05b201760e3f364ff6316301d347cbad95
+# first bad commit: [83d59e05b201760e3f364ff6316301d347cbad95] Re-land [LLD] Remove global state in lldCommon
